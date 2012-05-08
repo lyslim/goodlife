@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(:version => 20120331051839) do
 
   add_index "challenges_feats", ["challenge_id", "feat_id"], :name => "index_challenges_feats_on_challenge_id_and_feat_id", :unique => true
   add_index "challenges_feats", ["challenge_id"], :name => "index_challenges_feats_on_challenge_id"
-  add_index "challenges_feats", ["feat_id", "challenge_id"], :name => "Index_challenges_feats", :unique => true
 
   create_table "checkins", :force => true do |t|
     t.integer  "user_id",                       :null => false
@@ -65,15 +64,13 @@ ActiveRecord::Schema.define(:version => 20120331051839) do
   add_index "checkins", ["feat_id"], :name => "index_checkins_on_feat_id"
   add_index "checkins", ["user_id"], :name => "index_checkins_on_user_id"
 
-  create_table "checkins_scheduled_tasks", :force => true do |t|
+  create_table "checkins_scheduled_tasks", :id => false, :force => true do |t|
     t.integer "checkin_id"
-    t.integer "scheduled_id"
-    t.string  "scheduled_type"
-    t.boolean "completed"
+    t.integer "scheduled_task_id"
   end
 
   add_index "checkins_scheduled_tasks", ["checkin_id"], :name => "index_checkins_scheduled_tasks_on_checkin_id"
-  add_index "checkins_scheduled_tasks", ["scheduled_id"], :name => "index_checkins_scheduled_tasks_on_scheduled_task_id"
+  add_index "checkins_scheduled_tasks", ["scheduled_task_id"], :name => "index_checkins_scheduled_tasks_on_scheduled_task_id"
 
   create_table "comments", :force => true do |t|
     t.integer  "checkin_id"
@@ -151,6 +148,20 @@ ActiveRecord::Schema.define(:version => 20120331051839) do
 
   add_index "scheduled_habits", ["feat_id"], :name => "index_scheduled_habits_on_feat_id"
   add_index "scheduled_habits", ["user_id"], :name => "index_scheduled_habits_on_user_id"
+
+  create_table "scheduled_tasks", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.string   "task_type"
+    t.integer  "frequency_id"
+    t.datetime "due_on"
+    t.datetime "completed_at"
+    t.string   "type"
+    t.datetime "created_at"
+  end
+
+  add_index "scheduled_tasks", ["task_id", "task_type"], :name => "index_scheduled_tasks_on_task_id_and_task_type"
+  add_index "scheduled_tasks", ["user_id"], :name => "index_scheduled_tasks_on_user_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
